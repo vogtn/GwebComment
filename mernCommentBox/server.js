@@ -30,6 +30,27 @@ router.get('/', function(req,res){
   res.json({message: 'API Initialized'});
 });
 
+router.route('/comments')
+  .get(function(req,res) {
+    Comment.find(function(err, comments){
+      if (err)
+        res.send(err);
+      //response of json object of comments
+      res.json(comments)
+    });
+  })
+  .post(function(req,res){
+    var comment = new Comment();
+    comment.author = req.body.author;
+    comment.text = req.body.text;
+
+    comment.save(function(err){
+      if(err)
+        res.send(err);
+      res.json({ message: 'Comment sucessfully added!' });
+    });
+  });
+
 app.use('/api', router);
 
 //starting server and listen for requests
